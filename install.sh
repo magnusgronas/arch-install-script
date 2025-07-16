@@ -22,10 +22,9 @@ EOF
 }
 
 pre_install() {
-    greeter
     gum format "Please edit \`packages.conf\` to add or remove any packages you want to install"
     echo
-    printf "Press \e[32many\e[0m key to start installation or \e[31mctrl-c\e[0m to exit"
+    printf "Press \e[32many\e[0m key to start installation or \e[31mctrl-c\e[0m to exit\n"
     read -n 1 -sr
     printf "\e[34m :: \e[0mUpdating system and syncing pacman\n"
     sudo pacman -Syu --noconfirm
@@ -70,28 +69,38 @@ install_util() {
 
 install_packages() {
     printf "\e[34m :: \e[0mInstalling packages\n"
+    printf "\e[33m info: \e[0mall packages are located in \e[31mpackages.conf\e[0m\n"
+    echo
+    if [ ! -f "packages.conf" ]; then
+        gum log --structured --level error "packages.conf not found"
+        exit 1
+    fi
+    source packages.conf
 }
 
 lenovo_yoga_laptop_audio_fix() {
     printf "\e[34m :: \e[0mAudio fix for lenovo yoga pro 7 laptop\n"
-    gum confirm "Apply fix?" --prompt.padding "0 10" --selected.margin "0 4" && do_audiofix || return
-}
-
-do_audiofix() {
-    if [ ! -f "/etc/modprobe.d/mysound.conf" ]; then
-        sudo touch /etc/modprobe.d/mysound.conf
-        echo "options snd_sof_intel_hda_generic hda_model=alc287-yoga9-bass-spk-pin" | sudo tee /etc/modprobe.d/mysound.conf
-    else
-        printf "\e[33m/etc/modprobe.d/mysound.conf\e[0m already exists\n"
-        printf "Go to the file and append \e[32m\"options snd_sof_intel_hda_generic hda_model=alc287-yoga9-bass-spk-pin\"\e[0m to it\n"
-        printf " \e[31mNOTE: \e[0mYou need to reboot for the fix to work\n"
+    if gum confirm "Apply fix?"; then
+        if [ ! -f "/etc/modprobe.d/mysound.conf" ]; then
+            sudo touch /etc/modprobe.d/mysound.conf
+            echo "options snd_sof_intel_hda_generic hda_model=alc287-yoga9-bass-spk-pin" | sudo tee /etc/modprobe.d/mysound.conf
+        else
+            printf "\e[33m/etc/modprobe.d/mysound.conf\e[0m already exists\n"
+            printf "Go to the file and append \e[32m\"options snd_sof_intel_hda_generic hda_model=alc287-yoga9-bass-spk-pin\"\e[0m to it\n"
+            printf " \e[31mNOTE: \e[0mYou need to reboot for the fix to work\n"
+        fi
     fi
 }
 
 main() {
     greeter
     pre_install
+    lenovo_yoga_laptop_audio_fix
+    if command -v gh; then
+        if gum confirm "Connect github-cli to github? (needed for dotfiles setup)"; then
+            gh auth login
+        fi
+    fi
 }
 
-pre_install
-lenovo_yoga_laptop_audio_fix
+install_packages
