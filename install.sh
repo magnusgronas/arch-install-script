@@ -72,7 +72,7 @@ install_packages() {
     printf "\e[34m :: \e[0mInstalling packages\n"
     printf "\e[33m info: \e[0mall packages are located in \e[31mpackages.conf\e[0m\n"
     echo
-    if [ ! -f "packages.util" ]; then
+    if [ ! -f "packages.conf" ]; then
         gum log --structured --level error "packages.conf not found -- exiting"
         exit 1
     fi
