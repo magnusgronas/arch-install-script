@@ -118,7 +118,7 @@ dotfiles_setup() {
         fi
     fi
     cd "$HOME/$DIR_NAME" || exit
-    if ! stow; then
+    if ! command -v stow &>/dev/null; then
         gum log --structured --level error "stow is not installed -- skipping"
         return
     fi
