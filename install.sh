@@ -19,13 +19,14 @@ greeter() {
 
 
 EOF
+    gum format "Please edit \`packages.conf\` to add or remove any packages you want to install"
+    printf "\t\e[1mYou will need to enter your password when prompted\e[0m\n"
+    echo
+    printf "\tPress \e[32many\e[0m key to start installation or \e[31mctrl-c\e[0m to exit\n"
+    read -n 1 -sr
 }
 
 pre_install() {
-    gum format "Please edit \`packages.conf\` to add or remove any packages you want to install"
-    echo
-    printf "Press \e[32many\e[0m key to start installation or \e[31mctrl-c\e[0m to exit\n"
-    read -n 1 -sr
     printf "\e[34m :: \e[0mUpdating system and syncing pacman\n"
     sudo pacman -Syu --noconfirm
 
@@ -71,8 +72,8 @@ install_packages() {
     printf "\e[34m :: \e[0mInstalling packages\n"
     printf "\e[33m info: \e[0mall packages are located in \e[31mpackages.conf\e[0m\n"
     echo
-    if [ ! -f "packages.conf" ]; then
-        gum log --structured --level error "packages.conf not found"
+    if [ ! -f "packages.util" ]; then
+        gum log --structured --level error "packages.conf not found -- exiting"
         exit 1
     fi
     source packages.conf
@@ -92,15 +93,40 @@ lenovo_yoga_laptop_audio_fix() {
     fi
 }
 
+change_shell() {
+    if gum confirm "Do you wish to change your shell to zsh?"; then
+        sudo chsh -s /usr/bin/zsh
+    fi
+}
+
+dotfiles_setup() {
+    REPO_URL="https://github.com/magnusgronas/dotfiles.git"
+    DIR_NAME="dotfiles"
+
+    cd ~ || exit
+    if [ -d "$DIR_NAME" ]; then
+        gum log --structured --level info "~/dotfiles alredy exists –– skipping git clone"
+    else
+        if ! git clone "$REPO_URL"; then
+            gum log --structured --level error "clone failed"
+            return
+        fi
+    fi
+
+}
+
 main() {
     greeter
     pre_install
+    install_packages
+    change_shell
     lenovo_yoga_laptop_audio_fix
     if command -v gh; then
         if gum confirm "Connect github-cli to github? (needed for dotfiles setup)"; then
             gh auth login
         fi
     fi
+    dotfiles_setup
 }
 
-install_packages
+greeter
