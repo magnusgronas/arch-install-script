@@ -77,6 +77,12 @@ install_packages() {
         exit 1
     fi
     source packages.conf
+    install_util "${SYSTEM_UTILS[@]}"
+    install_util "${DEV_TOOLS[@]}"
+    install_util "${THEMEING[@]}"
+    install_util "${APPS[@]}"
+    install_util "${HYPRLAND_UTILS[@]}"
+    install_util "${FONTS[@]}"
 }
 
 lenovo_yoga_laptop_audio_fix() {
@@ -103,16 +109,28 @@ dotfiles_setup() {
     REPO_URL="https://github.com/magnusgronas/dotfiles.git"
     DIR_NAME="dotfiles"
 
-    cd ~ || exit
-    if [ -d "$DIR_NAME" ]; then
+    if [ -d "$HOME/$DIR_NAME" ]; then
         gum log --structured --level info "~/dotfiles alredy exists –– skipping git clone"
     else
-        if ! git clone "$REPO_URL"; then
+        if ! git clone "$REPO_URL" ~/dotfiles; then
             gum log --structured --level error "clone failed"
             return
         fi
     fi
-
+    cd "$HOME/$DIR_NAME" || exit
+    if ! stow; then
+        gum log --structured --level error "stow is not installed -- skipping"
+        return
+    fi
+    stow --adopt hypr
+    stow ghostty
+    stow nvim
+    stow ohmyposh
+    stow rofi
+    stow swaync
+    stow tmux
+    stow waybar
+    stow zsh
 }
 
 main() {
