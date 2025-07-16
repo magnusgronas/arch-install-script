@@ -137,7 +137,6 @@ main() {
     greeter
     pre_install
     install_packages
-    change_shell
     lenovo_yoga_laptop_audio_fix
     if command -v gh; then
         if gum confirm "Connect github-cli to github? (needed for dotfiles setup)"; then
@@ -145,6 +144,7 @@ main() {
         fi
     fi
     dotfiles_setup
+    change_shell
 }
 
 main
