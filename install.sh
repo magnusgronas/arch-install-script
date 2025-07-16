@@ -147,4 +147,4 @@ main() {
     dotfiles_setup
 }
 
-greeter
+main
