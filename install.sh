@@ -122,8 +122,8 @@ dotfiles_setup() {
         gum log --structured --level error "stow is not installed -- skipping"
         return
     fi
-    stow --adopt hypr
     stow ghostty
+    stow hypr
     stow nvim
     stow ohmyposh
     stow rofi
