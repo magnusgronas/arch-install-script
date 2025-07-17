@@ -170,7 +170,7 @@ main() {
     fi
     dotfiles_setup
     change_shell
-    matugen
+    # matugen
     printf " \e[33m::\e[0m Instalation complete, please reboot your system\n"
 }
 
