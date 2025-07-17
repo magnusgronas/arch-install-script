@@ -41,11 +41,12 @@ pre_install() {
         cd || exit
         rm -rf yay
         # Move ~/go to ~/.go
-        go env -w GOPATH=$HOME/.go
+        go env -w GOPATH="$HOME"/.go
         mv go .go
         go env GOPATH
+    else
+        printf "\e[33m info: \e[0myay installed -- skipping\n"
     fi
-    printf "\e[33m info: \e[0myay installed -- skipping\n"
 
     printf "\e[34m :: \e[0mInstalling gum for a pretty cli experience\n"
     sudo pacman -S --needed --noconfirm gum
@@ -80,7 +81,7 @@ install_packages() {
     printf "\e[34m :: \e[0mInstalling packages\n"
     printf "\e[33m info: \e[0mall packages are located in \e[31mpackages.conf\e[0m\n"
     echo
-    if [ ! -f "packages.conf" ]; then
+    if [ ! -f "./packages.conf" ]; then
         gum log --structured --level error "packages.conf not found -- exiting"
         exit 1
     fi
