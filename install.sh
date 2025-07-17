@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR=$(pwd)
+
 greeter() {
     cat <<"EOF"
 
@@ -38,7 +40,7 @@ pre_install() {
         cd ~/yay || exit
         echo "Building yay..."
         makepkg -si --noconfirm
-        cd - || exit
+        cd SCRIPT_DIR || exit
         rm -rf ~/yay
         # Move ~/go to ~/.go
         go env -w GOPATH="$HOME"/.go
@@ -146,7 +148,8 @@ setup_dirs() {
 
 matugen() {
     printf "\e[34m :: \e[0m Applying matugen colors\n"
-    cp ./blue_gradient.png ~/Pictures/wallpapers
+    cd SCRIPT_DIR || exit
+    cp blue_gradient.png ~/Pictures/wallpapers
     if ! command -v matugen &>/dev/null; then
         gum log --structured --level error "matugen not installed -- skipping"
         return
