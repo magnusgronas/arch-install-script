@@ -120,17 +120,12 @@ dotfiles_setup() {
     cd "$HOME/$DIR_NAME" || exit
     if ! command -v stow &>/dev/null; then
         gum log --structured --level error "stow is not installed -- skipping"
+        gum log --structured --level info "Download stow an manually apply dotfiles config"
+        echo
         return
     fi
-    stow ghostty
-    stow hypr
-    stow nvim
-    stow ohmyposh
-    stow rofi
-    stow swaync
-    stow tmux
-    stow waybar
-    stow zsh
+    rm -rf ~/.config/hypr
+    stow ghostty hypr nvim ohmyposh rofi swaync tmux waybar zsh matugen
 }
 
 main() {
@@ -145,6 +140,7 @@ main() {
     fi
     dotfiles_setup
     change_shell
+    printf " \e[33m::\e[0m Instalation complete, please reboot your system"
 }
 
 main
