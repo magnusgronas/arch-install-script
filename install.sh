@@ -133,13 +133,13 @@ dotfiles_setup() {
 }
 
 setup_dirs() {
-    printf "\[34m :: \[0m Setting up directory structure\n"
+    printf "\e[34m :: \e[0m Setting up directory structure\n"
     mkdir -p ~/dev ~/vaults ~/Pictures/wallpapers ~/Documents ~/Downloads ~/Music ~/Videos
     eza --icons=always --color=always -T -l 2
 }
 
 matugen() {
-    printf "\[34m :: \[0m Applying matugen colors\n"
+    printf "\e[34m :: \e[0m Applying matugen colors\n"
     cp blue_gradient.png ~/Pictures/wallpapers
     if ! command -v matugen &>/dev/null; then
         gum log --structured --level error "matugen not installed -- skipping"
