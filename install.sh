@@ -112,7 +112,7 @@ lenovo_yoga_laptop_audio_fix() {
 
 change_shell() {
     if gum confirm "Do you wish to change your shell to zsh?"; then
-        sudo chsh -s /usr/bin/zsh
+        sudo chsh -s /usr/bin/zsh "$USER"
     fi
 }
 
@@ -142,14 +142,14 @@ dotfiles_setup() {
 setup_dirs() {
     printf "\e[34m :: \e[0m Setting up directory structure\n"
     mkdir -p ~/dev ~/vaults ~/Pictures/wallpapers ~/Documents ~/Downloads ~/Music ~/Videos
-    echo "DIRS SETUP FINISHED"
+    cd "$SCRIPT_DIR" || exit
+    cp blue_gradient.png "$HOME/Pictures/wallpapers"
+    printf "\e[33mDirectory structure:\n"
     eza --icons=always --color=always -T -L 2 ~
 }
 
 matugen() {
     printf "\e[34m :: \e[0m Applying matugen colors\n"
-    cd "$SCRIPT_DIR" || exit
-    cp blue_gradient.png "$HOME/Pictures/wallpapers"
     if ! command -v matugen &>/dev/null; then
         gum log --structured --level error "matugen not installed -- skipping"
         return
