@@ -38,6 +38,8 @@ pre_install() {
         cd ~/yay || exit
         echo "Building yay..."
         makepkg -si --noconfirm
+        cd || exit
+        rm -rf yay
     fi
     printf "\e[33m info: \e[0myay installed -- skipping\n"
 
@@ -56,6 +58,7 @@ install_util() {
     for pkg in "${packages[@]}"; do
         if ! is_installed "$pkg"; then
             installing+=("$pkg")
+            printf "\e[31m - \e[0m%s is installed –– skipping\n" "$pkg"
         fi
     done
 
@@ -126,6 +129,10 @@ dotfiles_setup() {
     fi
     rm -rf ~/.config/hypr
     stow ghostty hypr nvim ohmyposh rofi swaync tmux waybar zsh matugen
+}
+
+setup_dirs() {
+    mkdir -p ~/dev ~/vaults ~/Pictures/wallpapers ~/Documents ~/Downloads ~/Music ~/Videos
 }
 
 main() {
