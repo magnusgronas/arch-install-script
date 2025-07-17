@@ -40,6 +40,10 @@ pre_install() {
         makepkg -si --noconfirm
         cd || exit
         rm -rf yay
+        # Move ~/go to ~/.go
+        go env -w GOPATH=$HOME/.go
+        mv go .go
+        go env GOPATH
     fi
     printf "\e[33m info: \e[0myay installed -- skipping\n"
 
@@ -136,7 +140,7 @@ setup_dirs() {
     printf "\e[34m :: \e[0m Setting up directory structure\n"
     mkdir -p ~/dev ~/vaults ~/Pictures/wallpapers ~/Documents ~/Downloads ~/Music ~/Videos
     echo "DIRS SETUP FINISHED"
-    eza --icons=always --color=always -T -l 2 ~
+    eza --icons=always --color=always -T -L 2 ~
 }
 
 matugen() {
