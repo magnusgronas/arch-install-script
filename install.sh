@@ -135,12 +135,13 @@ dotfiles_setup() {
 setup_dirs() {
     printf "\e[34m :: \e[0m Setting up directory structure\n"
     mkdir -p ~/dev ~/vaults ~/Pictures/wallpapers ~/Documents ~/Downloads ~/Music ~/Videos
-    eza --icons=always --color=always -T -l 2
+    echo "DIRS SETUP FINISHED"
+    eza --icons=always --color=always -T -l 2 ~
 }
 
 matugen() {
     printf "\e[34m :: \e[0m Applying matugen colors\n"
-    cp blue_gradient.png ~/Pictures/wallpapers
+    cp ./blue_gradient.png ~/Pictures/wallpapers
     if ! command -v matugen &>/dev/null; then
         gum log --structured --level error "matugen not installed -- skipping"
         return
@@ -154,7 +155,7 @@ main() {
     install_packages
     lenovo_yoga_laptop_audio_fix
     setup_dirs
-    if command -v gh; then
+    if command gh; then
         if gum confirm "Connect github-cli to github? (needed for dotfiles setup)"; then
             gh auth login
         fi
