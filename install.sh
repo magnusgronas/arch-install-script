@@ -163,7 +163,7 @@ main() {
     install_packages
     lenovo_yoga_laptop_audio_fix
     setup_dirs
-    if command -v gh; then
+    if command -v gh &>/dev/null; then
         if gum confirm "Connect github-cli to github? (needed for dotfiles setup)"; then
             gh auth login
         fi
