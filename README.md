@@ -1,5 +1,7 @@
 # ALSI - Arch Linux Setup Interface
 
+**For personal use**
+
 Tool to download my personal hyprland config on arch linux
 
 ## Prerequisites
